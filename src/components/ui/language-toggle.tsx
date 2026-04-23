@@ -11,7 +11,7 @@ export function LanguageToggle() {
       onClick={toggleLocale}
       aria-label={t.switch_language()}
       title={t.switch_language()}
-      className="inline-flex h-10 min-w-10 items-center justify-center rounded-full border px-3 text-sm font-semibold transition-colors hover:opacity-80"
+      className="inline-flex cursor-pointer h-10 min-w-10 items-center justify-center rounded-full border px-3 text-sm font-semibold transition-colors hover:opacity-80"
       style={{
         borderColor: "var(--color-border-line)",
         background: "var(--color-surface-bg)",

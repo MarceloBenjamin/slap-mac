@@ -27,7 +27,7 @@ export function ThemeToggle() {
       onClick={handleClick}
       aria-label={label}
       title={label}
-      className="inline-flex h-10 w-10 items-center justify-center rounded-full border transition-colors hover:opacity-80"
+      className="inline-flex cursor-pointer h-10 w-10 items-center justify-center rounded-full border transition-colors hover:opacity-80"
       style={{
         borderColor: "var(--color-border-line)",
         background: "var(--color-surface-bg)",
