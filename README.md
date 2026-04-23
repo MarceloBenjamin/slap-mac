@@ -2,8 +2,7 @@
 
 Informational landing page for **Slap Mac**, a tiny menu bar app that uses the MacBook's motion sensor (Sudden Motion Sensor) to turn every slap on the chassis into a sound.
 
-[Download SlapMac 1.0.0](https://slapmac.com.br/downloads/SlapMac-1.0.0-arm64.dmg)
-[Visit the site](https://slapmac.com.br)
+[Download SlapMac 1.0.0](https://slapmac.com.br)
 
 ---
 
