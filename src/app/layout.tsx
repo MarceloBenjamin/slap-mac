@@ -4,6 +4,7 @@ import { Header } from "@/components/layout/header";
 import { DEFAULT_LOCALE, htmlLangFor } from "@/lib/i18n/constants";
 import { LocaleProvider } from "@/lib/i18n/provider";
 import { absoluteUrl, DOWNLOAD_DMG_PATH, SITE_URL } from "@/lib/site";
+import { FirebaseAnalytics } from "@/components/firebase-analytics";
 import { ThemeInitScript } from "@/lib/theme/init-script";
 import "./globals.css";
 
@@ -128,6 +129,7 @@ export default function RootLayout({
           }}
         />
         <LocaleProvider initialLocale={locale}>
+          <FirebaseAnalytics />
           <Header />
           {children}
         </LocaleProvider>

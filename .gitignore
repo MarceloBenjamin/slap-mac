@@ -31,9 +31,15 @@ yarn-debug.log*
 yarn-error.log*
 .pnpm-debug.log*
 
-# env files
-.env*
-!.env.example
+# Environment — Firebase keys and other secrets (never commit real values)
+.env
+.env.local
+.env.development
+.env.development.local
+.env.test
+.env.test.local
+.env.production
+.env.production.local
 
 # vercel
 .vercel
