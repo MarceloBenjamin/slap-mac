@@ -1,6 +1,6 @@
 "use client";
 
-import { Download, Hand, ShieldCheck, type LucideIcon } from "lucide-react";
+import { Download, Hand, ShieldCheck, Unlock, type LucideIcon } from "lucide-react";
 import { useT } from "@/lib/i18n/provider";
 
 export function HowItWorks() {
@@ -17,14 +17,19 @@ export function HowItWorks() {
       description: t.how_step1_desc(),
     },
     {
-      icon: ShieldCheck,
+      icon: Unlock,
       title: t.how_step2_title(),
       description: t.how_step2_desc(),
     },
     {
-      icon: Hand,
+      icon: ShieldCheck,
       title: t.how_step3_title(),
       description: t.how_step3_desc(),
+    },
+    {
+      icon: Hand,
+      title: t.how_step4_title(),
+      description: t.how_step4_desc(),
     },
   ];
 
@@ -56,7 +61,7 @@ export function HowItWorks() {
           </p>
         </div>
 
-        <ol className="relative mt-12! grid w-full grid-cols-1 gap-10 sm:mt-16 sm:grid-cols-3 sm:gap-6 lg:gap-8">
+        <ol className="relative mt-12! grid w-full grid-cols-1 gap-10 sm:mt-16 sm:grid-cols-2 sm:gap-6 lg:grid-cols-4 lg:gap-8">
           <Connector />
           {steps.map((step, i) => (
             <Step
@@ -77,7 +82,7 @@ function Connector() {
   return (
     <div
       aria-hidden
-      className="pointer-events-none absolute left-[16.66%] right-[16.66%] top-7 hidden border-t-2 border-dashed sm:block"
+      className="pointer-events-none absolute left-[12.5%] right-[12.5%] top-7 hidden border-t-2 border-dashed lg:block"
       style={{ borderColor: "var(--color-border-line)" }}
     />
   );
