@@ -29,7 +29,11 @@ export function HowItWorks() {
   ];
 
   return (
-    <section className="relative flex w-full justify-center py-16 sm:py-24 lg:py-28">
+    <section
+      id="how-it-works"
+      aria-labelledby="how-heading"
+      className="relative flex w-full justify-center py-16 sm:py-24 lg:py-28"
+    >
       <div className="flex w-full max-w-7xl flex-col items-center px-4 sm:px-6 lg:px-8">
         <div className="max-w-2xl text-center">
           <p
@@ -38,7 +42,10 @@ export function HowItWorks() {
           >
             {t.how_eyebrow()}
           </p>
-          <h2 className="mt-3! text-3xl font-bold tracking-tight sm:text-4xl lg:text-5xl">
+          <h2
+            id="how-heading"
+            className="mt-3! text-3xl font-bold tracking-tight sm:text-4xl lg:text-5xl"
+          >
             {t.how_title()}
           </h2>
           <p

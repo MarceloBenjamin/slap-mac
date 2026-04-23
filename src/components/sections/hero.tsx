@@ -1,21 +1,28 @@
 "use client";
 
 import { useT } from "@/lib/i18n/provider";
+import { DOWNLOAD_DMG_PATH } from "@/lib/site";
 
-const DOWNLOAD_FILE = "/downloads/SlapMac-1.0.0-arm64.dmg";
 const DOWNLOAD_FILENAME = "SlapMac-1.0.0-arm64.dmg";
 
 export function Hero() {
   const t = useT();
 
   return (
-    <section className="relative isolate overflow-hidden flex justify-center">
+    <section
+      id="hero"
+      aria-labelledby="hero-heading"
+      className="relative isolate overflow-hidden flex justify-center"
+    >
       <BackgroundGlow />
 
       <div className="flex w-full max-w-7xl flex-col items-center px-4 pt-10 sm:px-6 sm:pb-24 sm:pt-20 lg:px-8 lg:pb-16 lg:pt-12">
         <CompatBanner label={t.hero_compat()} />
 
-        <h1 className="mt-6 text-center text-5xl font-bold leading-[1.1] tracking-tight sm:mt-8 sm:text-6xl lg:text-7xl xl:text-8xl">
+        <h1
+          id="hero-heading"
+          className="mt-6 text-center text-5xl font-bold leading-[1.1] tracking-tight sm:mt-8 sm:text-6xl lg:text-7xl xl:text-8xl"
+        >
           <span className="block">{t.hero_headline_line1()}</span>
           <span
             className="block bg-clip-text pb-2 text-transparent"
@@ -82,7 +89,7 @@ function CompatBanner({ label }: { label: string }) {
 function DownloadButton({ label }: { label: string }) {
   return (
     <a
-      href={DOWNLOAD_FILE}
+      href={DOWNLOAD_DMG_PATH}
       download={DOWNLOAD_FILENAME}
       className="group inline-flex items-center gap-2.5 rounded-full px-7 py-3.5 text-base font-semibold text-white shadow-lg transition-all hover:scale-[1.02] hover:shadow-xl active:scale-[0.99] sm:px-8 sm:py-4 sm:text-lg"
       style={{

@@ -40,7 +40,11 @@ export function Features() {
   ];
 
   return (
-    <section className="relative w-full py-2 sm:py-28 lg:py-2 flex justify-center">
+    <section
+      id="features"
+      aria-labelledby="features-heading"
+      className="relative w-full py-2 sm:py-28 lg:py-2 flex justify-center"
+    >
       <div className="mx-auto w-full max-w-7xl px-4 sm:px-6 lg:px-8 flex flex-col items-center">
         <div className="mx-auto max-w-2xl text-center">
           <p
@@ -50,12 +54,15 @@ export function Features() {
             {t.features_eyebrow()}
           </p>
 
-          <h2 className="mt-3! text-3xl font-bold tracking-tight sm:text-4xl lg:text-5xl">
+          <h2
+            id="features-heading"
+            className="mt-3! text-3xl font-bold tracking-tight sm:text-4xl lg:text-5xl"
+          >
             {t.features_title()}
           </h2>
 
           <p
-            className="mt-4 text-base sm:text-lg"
+            className="mt-4! text-base sm:text-lg"
             style={{ color: "var(--color-text-muted)" }}
           >
             {t.features_subtitle()}
@@ -87,7 +94,7 @@ function FeatureCard({
   description: string;
 }) {
   return (
-    <div
+    <article
       className="group relative overflow-hidden rounded-2xl border p-6 transition-all duration-300 hover:-translate-y-0.5 sm:p-8"
       style={{
         borderColor: "var(--color-border-line)",
@@ -124,6 +131,6 @@ function FeatureCard({
       >
         {description}
       </p>
-    </div>
+    </article>
   );
 }

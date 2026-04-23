@@ -62,18 +62,24 @@ export function LocaleProvider({
     setLocale(localeRef.current === "en" ? "pt-br" : "en");
   }, [setLocale]);
 
+  // Plain object, not Proxy(m): Paraglide exports are non-configurable;
+  // Proxy get traps cannot replace those functions (breaks SSG / _not-found).
   const t = useMemo<Messages>(() => {
-    return new Proxy(m, {
-      get(target, prop, receiver) {
-        const value = Reflect.get(target, prop, receiver);
-        if (typeof value !== "function") return value;
-        return (inputs?: unknown, opts?: { locale?: Locale }) =>
+    const target = m as Record<string, unknown>;
+    const out: Record<string, unknown> = {};
+    for (const key of Object.keys(target)) {
+      const value = target[key];
+      if (typeof value === "function") {
+        out[key] = (inputs?: unknown, opts?: { locale?: Locale }) =>
           (value as (i?: unknown, o?: { locale?: Locale }) => string)(inputs, {
             locale,
             ...opts,
           });
-      },
-    }) as Messages;
+      } else {
+        out[key] = value;
+      }
+    }
+    return out as Messages;
   }, [locale]);
 
   const value = useMemo<LocaleContextValue>(

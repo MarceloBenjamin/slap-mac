@@ -10,11 +10,25 @@ export function About() {
   const t = useT();
 
   return (
-    <section className="relative flex w-full justify-center py-4 sm:py-24 lg:py-10">
+    <section
+      id="about"
+      aria-labelledby="about-heading"
+      className="relative flex w-full justify-center py-4 sm:py-24 lg:py-10"
+    >
       <div className="flex w-full max-w-3xl flex-col items-center px-4 text-center sm:px-6 lg:px-8">
-        <span className="mt-5 text-lg font-light tracking-tight sm:text-3xl lg:text-lg">
+        <h2
+          id="about-heading"
+          className="mt-3 text-lg font-light tracking-tight sm:text-3xl lg:text-lg"
+        >
           {t.about_title()}
-        </span>
+        </h2>
+
+        <p
+          className="mt-3 max-w-xl text-sm sm:text-base"
+          style={{ color: "var(--color-text-muted)" }}
+        >
+          {t.about_subtitle()}
+        </p>
 
         <div className="mt-4! flex flex-col items-center gap-3 sm:mt-8 sm:flex-row sm:gap-4">
           <ContactLink
@@ -31,23 +45,6 @@ export function About() {
         </div>
       </div>
     </section>
-  );
-}
-
-function Avatar() {
-  return (
-    <div
-      className="mt-6 flex h-16 w-16 items-center justify-center rounded-full text-lg font-bold text-white shadow-md sm:mt-8 sm:h-20 sm:w-20 sm:text-xl"
-      style={{
-        background:
-          "linear-gradient(135deg, var(--color-primary-base), var(--color-secondary-base))",
-        boxShadow:
-          "0 10px 24px -10px color-mix(in srgb, var(--color-primary-base) 60%, transparent)",
-      }}
-      aria-hidden
-    >
-      MB
-    </div>
   );
 }
 
