@@ -1,7 +1,15 @@
 "use client";
 
+import { getDownloadURL, ref } from "firebase/storage";
+import { Loader2 } from "lucide-react";
+import { useCallback, useEffect, useRef, useState } from "react";
+import { getFirebaseApp, getFirebaseStorage } from "@/lib/firebase/client";
+import { getFirebaseConfig } from "@/lib/firebase/config";
 import { useT } from "@/lib/i18n/provider";
-import { DOWNLOAD_DMG_URL, DOWNLOAD_FILENAME } from "@/lib/site";
+import {
+  DOWNLOAD_FILENAME,
+  DOWNLOAD_STORAGE_OBJECT_PATH,
+} from "@/lib/site";
 
 export function Hero() {
   const t = useT();
@@ -84,13 +92,69 @@ function CompatBanner({ label }: { label: string }) {
   );
 }
 
+const DOWNLOAD_COOLDOWN_MS = 4000;
+
 function DownloadButton({ label }: { label: string }) {
+  const [loading, setLoading] = useState(false);
+  const [cooldown, setCooldown] = useState(false);
+  const cooldownTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+  const firebaseReady = getFirebaseConfig() !== null;
+
+  useEffect(() => {
+    return () => {
+      if (cooldownTimerRef.current) {
+        clearTimeout(cooldownTimerRef.current);
+      }
+    };
+  }, []);
+
+  const handleClick = useCallback(async () => {
+    const app = getFirebaseApp();
+    if (!app) {
+      return;
+    }
+    setLoading(true);
+    try {
+      const storage = getFirebaseStorage(app);
+      const url = await getDownloadURL(
+        ref(storage, DOWNLOAD_STORAGE_OBJECT_PATH),
+      );
+      const a = document.createElement("a");
+      a.href = url;
+      a.download = DOWNLOAD_FILENAME;
+      a.rel = "noopener noreferrer";
+      document.body.appendChild(a);
+      a.click();
+      a.remove();
+    } catch (err) {
+      console.error("Download failed:", err);
+    } finally {
+      setLoading(false);
+      setCooldown(true);
+      if (cooldownTimerRef.current) {
+        clearTimeout(cooldownTimerRef.current);
+      }
+      cooldownTimerRef.current = setTimeout(() => {
+        setCooldown(false);
+        cooldownTimerRef.current = null;
+      }, DOWNLOAD_COOLDOWN_MS);
+    }
+  }, []);
+
+  const disabled = loading || cooldown || !firebaseReady;
+
   return (
-    <a
-      href={DOWNLOAD_DMG_URL}
-      download={DOWNLOAD_FILENAME}
-      rel="noopener noreferrer"
-      className="group inline-flex items-center gap-2.5 rounded-full px-7 py-3.5 text-base font-semibold text-white shadow-lg transition-all hover:scale-[1.02] hover:shadow-xl active:scale-[0.99] sm:px-8 sm:py-4 sm:text-lg"
+    <button
+      type="button"
+      onClick={() => void handleClick()}
+      disabled={disabled}
+      aria-busy={loading}
+      title={
+        firebaseReady
+          ? undefined
+          : "Set NEXT_PUBLIC_FIREBASE_* in .env.local (Firebase not configured)."
+      }
+      className="group inline-flex cursor-pointer items-center gap-2.5 rounded-full px-7 py-3.5 text-base font-semibold text-white shadow-lg transition-all enabled:hover:scale-[1.02] enabled:hover:shadow-xl enabled:active:scale-[0.99] disabled:cursor-not-allowed disabled:opacity-60 sm:px-8 sm:py-4 sm:text-lg"
       style={{
         background:
           "linear-gradient(135deg, var(--color-primary-base), var(--color-secondary-base))",
@@ -98,9 +162,16 @@ function DownloadButton({ label }: { label: string }) {
           "0 10px 30px -10px color-mix(in srgb, var(--color-primary-base) 60%, transparent)",
       }}
     >
-      <DownloadIcon />
+      {loading ? (
+        <Loader2
+          className="h-5 w-5 shrink-0 animate-spin"
+          aria-hidden
+        />
+      ) : (
+        <DownloadIcon />
+      )}
       <span>{label}</span>
-    </a>
+    </button>
   );
 }
 

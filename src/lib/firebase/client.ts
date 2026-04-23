@@ -1,5 +1,6 @@
 import { getApp, getApps, initializeApp, type FirebaseApp } from "firebase/app";
 import { getAnalytics, isSupported, type Analytics } from "firebase/analytics";
+import { getStorage, type FirebaseStorage } from "firebase/storage";
 import { getFirebaseConfig } from "./config";
 
 export function getFirebaseApp(): FirebaseApp | null {
@@ -11,6 +12,10 @@ export function getFirebaseApp(): FirebaseApp | null {
     return getApp();
   }
   return initializeApp(config);
+}
+
+export function getFirebaseStorage(app: FirebaseApp): FirebaseStorage {
+  return getStorage(app);
 }
 
 let analyticsInit: Promise<Analytics | null> | null = null;
