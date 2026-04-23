@@ -85,7 +85,7 @@ Open [http://localhost:3000](http://localhost:3000).
 
 ## Author
 
-**Marcelo Benjamin** — indie project built with care for the macOS community.
+**Marcelo Benjamin**
 
 - [LinkedIn](https://www.linkedin.com/in/marcelobenjamin/)
 
