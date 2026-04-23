@@ -2,8 +2,8 @@
 
 Informational landing page for **Slap Mac**, a tiny menu bar app that uses the MacBook's motion sensor (Sudden Motion Sensor) to turn every slap on the chassis into a sound.
 
-[![Download SlapMac 1.0.0](https://img.shields.io/badge/Download-SlapMac%201.0.0%20(arm64)-FF6B00?style=for-the-badge&logo=apple&logoColor=white)](https://slapmac.com.br/downloads/SlapMac-1.0.0-arm64.dmg)
-[![Visit the site](https://img.shields.io/badge/Visit-slapmac.com.br-FF9E00?style=for-the-badge&logo=safari&logoColor=white)](https://slapmac.com.br)
+[Download SlapMac 1.0.0](https://slapmac.com.br/downloads/SlapMac-1.0.0-arm64.dmg)
+[Visit the site](https://slapmac.com.br)
 
 ---
 
@@ -12,19 +12,20 @@ Informational landing page for **Slap Mac**, a tiny menu bar app that uses the M
 **Slap Mac** reads the MacBook's accelerometer in real time and triggers a sound every time you tap the chassis. It lives in the menu bar, is free forever, with no accounts and no ads.
 
 - **Requirements**: macOS 14.6+ (Sonoma) · MacBook with M1 Pro chip or newer
-- **Size**: ~2 MB
 - **Price**: 100% free
 
 ## Stack
 
-| Layer | Technology |
-|---|---|
-| Framework | [Next.js 16](https://nextjs.org/) (App Router + Turbopack) |
-| UI | [React 19](https://react.dev/) + [TypeScript](https://www.typescriptlang.org/) |
-| Styling | [Tailwind CSS v4](https://tailwindcss.com/) + CSS variables |
-| i18n | [Paraglide JS 2](https://inlang.com/m/gerre34r/library-inlang-paraglideJs) |
-| Icons | [lucide-react](https://lucide.dev/) |
-| Font | [Urbanist](https://fonts.google.com/specimen/Urbanist) via `next/font` |
+
+| Layer     | Technology                                                                     |
+| --------- | ------------------------------------------------------------------------------ |
+| Framework | [Next.js 16](https://nextjs.org/) (App Router + Turbopack)                     |
+| UI        | [React 19](https://react.dev/) + [TypeScript](https://www.typescriptlang.org/) |
+| Styling   | [Tailwind CSS v4](https://tailwindcss.com/) + CSS variables                    |
+| i18n      | [Paraglide JS 2](https://inlang.com/m/gerre34r/library-inlang-paraglideJs)     |
+| Icons     | [lucide-react](https://lucide.dev/)                                            |
+| Font      | [Urbanist](https://fonts.google.com/specimen/Urbanist) via `next/font`         |
+
 
 ### Architectural decisions
 
@@ -62,13 +63,15 @@ Open [http://localhost:3000](http://localhost:3000).
 
 ### Scripts
 
-| Script | What it does |
-|---|---|
-| `npm run dev` | Compiles i18n and starts the dev server |
-| `npm run build` | Compiles i18n and builds for production |
-| `npm run start` | Runs the production build |
-| `npm run lint` | Runs the linter |
+
+| Script                 | What it does                                 |
+| ---------------------- | -------------------------------------------- |
+| `npm run dev`          | Compiles i18n and starts the dev server      |
+| `npm run build`        | Compiles i18n and builds for production      |
+| `npm run start`        | Runs the production build                    |
+| `npm run lint`         | Runs the linter                              |
 | `npm run i18n:compile` | Compiles message JSONs into `src/paraglide/` |
+
 
 ### Editing translations
 
