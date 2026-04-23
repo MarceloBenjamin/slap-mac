@@ -3,7 +3,7 @@ import { Urbanist } from "next/font/google";
 import { Header } from "@/components/layout/header";
 import { DEFAULT_LOCALE, htmlLangFor } from "@/lib/i18n/constants";
 import { LocaleProvider } from "@/lib/i18n/provider";
-import { absoluteUrl, DOWNLOAD_DMG_PATH, SITE_URL } from "@/lib/site";
+import { absoluteUrl, DOWNLOAD_DMG_URL, SITE_URL } from "@/lib/site";
 import { FirebaseAnalytics } from "@/components/firebase-analytics";
 import { ThemeInitScript } from "@/lib/theme/init-script";
 import "./globals.css";
@@ -93,7 +93,7 @@ const softwareJsonLd = {
     price: "0",
     priceCurrency: "USD",
   },
-  downloadUrl: absoluteUrl(DOWNLOAD_DMG_PATH),
+  downloadUrl: DOWNLOAD_DMG_URL,
   url: SITE_URL.replace(/\/$/, ""),
   author: {
     "@type": "Person",

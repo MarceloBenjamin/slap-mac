@@ -18,9 +18,6 @@
 # production
 /build
 
-# app binaries (use GitHub Releases instead)
-/public/downloads/
-
 # misc
 .DS_Store
 *.pem

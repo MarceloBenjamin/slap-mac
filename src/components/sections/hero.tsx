@@ -1,9 +1,7 @@
 "use client";
 
 import { useT } from "@/lib/i18n/provider";
-import { DOWNLOAD_DMG_PATH } from "@/lib/site";
-
-const DOWNLOAD_FILENAME = "SlapMac-1.0.0-arm64.dmg";
+import { DOWNLOAD_DMG_URL, DOWNLOAD_FILENAME } from "@/lib/site";
 
 export function Hero() {
   const t = useT();
@@ -89,8 +87,9 @@ function CompatBanner({ label }: { label: string }) {
 function DownloadButton({ label }: { label: string }) {
   return (
     <a
-      href={DOWNLOAD_DMG_PATH}
+      href={DOWNLOAD_DMG_URL}
       download={DOWNLOAD_FILENAME}
+      rel="noopener noreferrer"
       className="group inline-flex items-center gap-2.5 rounded-full px-7 py-3.5 text-base font-semibold text-white shadow-lg transition-all hover:scale-[1.02] hover:shadow-xl active:scale-[0.99] sm:px-8 sm:py-4 sm:text-lg"
       style={{
         background:

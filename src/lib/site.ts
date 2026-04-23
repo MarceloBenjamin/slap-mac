@@ -4,7 +4,11 @@ export const SITE_URL =
 
 export const SITE_ORIGIN = new URL(SITE_URL).origin;
 
-export const DOWNLOAD_DMG_PATH = "/downloads/SlapMac-1.0.0-arm64.dmg";
+/** Public DMG hosted on Firebase Storage (signed download URL). */
+export const DOWNLOAD_DMG_URL =
+  "https://firebasestorage.googleapis.com/v0/b/slap-mac-94172.firebasestorage.app/o/SlapMac-1.0.0-arm64.dmg?alt=media&token=d80cadd1-0bd6-4817-8fa0-0c89782eb9ff";
+
+export const DOWNLOAD_FILENAME = "SlapMac-1.0.0-arm64.dmg";
 
 export function absoluteUrl(path: string): string {
   const base = SITE_URL.replace(/\/$/, "");
