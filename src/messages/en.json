@@ -11,6 +11,8 @@
   "hero_subheadline": "A tiny menu bar app that taps into your MacBook's built-in Sudden Motion Sensor and turns every slap into a sound. No setup, no accounts. 100% free.",
   "hero_download": "Download for Mac",
   "hero_download_meta": "Free · Apple Silicon",
+  "hero_download_error_not_configured": "This build can't reach Firebase Storage. Add NEXT_PUBLIC_FIREBASE_* to the build environment, or set NEXT_PUBLIC_DOWNLOAD_DMG_URL to a direct .dmg link.",
+  "hero_download_error_failed": "Couldn't start the download. Check your connection and try again.",
   "hero_mockup_title": "Slap Mac",
   "hero_mockup_status": "Listening for slaps…",
   "hero_mockup_sensitivity": "Sensitivity",

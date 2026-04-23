@@ -2,11 +2,12 @@
 
 import { getDownloadURL, ref } from "firebase/storage";
 import { Loader2 } from "lucide-react";
-import { useCallback, useEffect, useRef, useState } from "react";
+import { useCallback, useEffect, useLayoutEffect, useRef, useState } from "react";
 import { getFirebaseApp, getFirebaseStorage } from "@/lib/firebase/client";
 import { getFirebaseConfig } from "@/lib/firebase/config";
 import { useT } from "@/lib/i18n/provider";
 import {
+  DOWNLOAD_DMG_FALLBACK_URL,
   DOWNLOAD_FILENAME,
   DOWNLOAD_STORAGE_OBJECT_PATH,
 } from "@/lib/site";
@@ -49,7 +50,11 @@ export function Hero() {
         </p>
 
         <div className="mt-8! flex flex-col items-center gap-3 sm:mt-10">
-          <DownloadButton label={t.hero_download()} />
+          <DownloadButton
+            label={t.hero_download()}
+            errorNotConfigured={t.hero_download_error_not_configured()}
+            errorFailed={t.hero_download_error_failed()}
+          />
           <p
             className="text-xs sm:text-sm"
             style={{ color: "var(--color-text-muted)" }}
@@ -94,11 +99,25 @@ function CompatBanner({ label }: { label: string }) {
 
 const DOWNLOAD_COOLDOWN_MS = 4000;
 
-function DownloadButton({ label }: { label: string }) {
+function DownloadButton({
+  label,
+  errorNotConfigured,
+  errorFailed,
+}: {
+  label: string;
+  errorNotConfigured: string;
+  errorFailed: string;
+}) {
   const [loading, setLoading] = useState(false);
   const [cooldown, setCooldown] = useState(false);
+  const [downloadError, setDownloadError] = useState<string | null>(null);
+  /** After mount: tooltip if env is incomplete (informational only). */
+  const [missingFirebaseEnv, setMissingFirebaseEnv] = useState(false);
   const cooldownTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
-  const firebaseReady = getFirebaseConfig() !== null;
+
+  useLayoutEffect(() => {
+    setMissingFirebaseEnv(getFirebaseConfig() === null);
+  }, []);
 
   useEffect(() => {
     return () => {
@@ -108,17 +127,47 @@ function DownloadButton({ label }: { label: string }) {
     };
   }, []);
 
+  const startCooldown = useCallback(() => {
+    setCooldown(true);
+    if (cooldownTimerRef.current) {
+      clearTimeout(cooldownTimerRef.current);
+    }
+    cooldownTimerRef.current = setTimeout(() => {
+      setCooldown(false);
+      cooldownTimerRef.current = null;
+    }, DOWNLOAD_COOLDOWN_MS);
+  }, []);
+
   const handleClick = useCallback(async () => {
+    setDownloadError(null);
+
     const app = getFirebaseApp();
-    if (!app) {
+    const useFallback = !app && Boolean(DOWNLOAD_DMG_FALLBACK_URL);
+
+    if (!app && !useFallback) {
+      const detail = {
+        hint: "Set NEXT_PUBLIC_FIREBASE_* for the build, or NEXT_PUBLIC_DOWNLOAD_DMG_URL as a fallback link.",
+        configPresent: getFirebaseConfig() !== null,
+      };
+      console.warn("[Slap Mac] Download skipped: Firebase not initialized.", detail);
+      setDownloadError(errorNotConfigured);
       return;
     }
+
+    if (useFallback && process.env.NODE_ENV !== "production") {
+      console.info(
+        "[Slap Mac] Download: using NEXT_PUBLIC_DOWNLOAD_DMG_URL (Firebase app not in this bundle).",
+      );
+    }
+
     setLoading(true);
     try {
-      const storage = getFirebaseStorage(app);
-      const url = await getDownloadURL(
-        ref(storage, DOWNLOAD_STORAGE_OBJECT_PATH),
-      );
+      const url = app
+        ? await getDownloadURL(
+            ref(getFirebaseStorage(app), DOWNLOAD_STORAGE_OBJECT_PATH),
+          )
+        : DOWNLOAD_DMG_FALLBACK_URL!;
+
       const a = document.createElement("a");
       a.href = url;
       a.download = DOWNLOAD_FILENAME;
@@ -127,51 +176,58 @@ function DownloadButton({ label }: { label: string }) {
       a.click();
       a.remove();
     } catch (err) {
-      console.error("Download failed:", err);
+      console.error("[Slap Mac] Download failed:", err);
+      setDownloadError(errorFailed);
     } finally {
       setLoading(false);
-      setCooldown(true);
-      if (cooldownTimerRef.current) {
-        clearTimeout(cooldownTimerRef.current);
-      }
-      cooldownTimerRef.current = setTimeout(() => {
-        setCooldown(false);
-        cooldownTimerRef.current = null;
-      }, DOWNLOAD_COOLDOWN_MS);
+      startCooldown();
     }
-  }, []);
+  }, [errorFailed, errorNotConfigured, startCooldown]);
 
-  const disabled = loading || cooldown || !firebaseReady;
+  const disabled = loading || cooldown;
 
   return (
-    <button
-      type="button"
-      onClick={() => void handleClick()}
-      disabled={disabled}
-      aria-busy={loading}
-      title={
-        firebaseReady
-          ? undefined
-          : "Set NEXT_PUBLIC_FIREBASE_* in .env.local (Firebase not configured)."
-      }
-      className="group inline-flex cursor-pointer items-center gap-2.5 rounded-full px-7 py-3.5 text-base font-semibold text-white shadow-lg transition-all enabled:hover:scale-[1.02] enabled:hover:shadow-xl enabled:active:scale-[0.99] disabled:cursor-not-allowed disabled:opacity-60 sm:px-8 sm:py-4 sm:text-lg"
-      style={{
-        background:
-          "linear-gradient(135deg, var(--color-primary-base), var(--color-secondary-base))",
-        boxShadow:
-          "0 10px 30px -10px color-mix(in srgb, var(--color-primary-base) 60%, transparent)",
-      }}
-    >
-      {loading ? (
-        <Loader2
-          className="h-5 w-5 shrink-0 animate-spin"
-          aria-hidden
-        />
-      ) : (
-        <DownloadIcon />
-      )}
-      <span>{label}</span>
-    </button>
+    <div className="flex flex-col items-center gap-2">
+      <button
+        type="button"
+        onClick={() => void handleClick()}
+        disabled={disabled}
+        aria-busy={loading}
+        aria-describedby={downloadError ? "download-error" : undefined}
+        title={
+          missingFirebaseEnv
+            ? "Set NEXT_PUBLIC_FIREBASE_* in .env.local (Firebase not configured)."
+            : undefined
+        }
+        className="group inline-flex cursor-pointer items-center gap-2.5 rounded-full px-7 py-3.5 text-base font-semibold text-white shadow-lg transition-all enabled:hover:scale-[1.02] enabled:hover:shadow-xl enabled:active:scale-[0.99] disabled:cursor-not-allowed disabled:opacity-60 sm:px-8 sm:py-4 sm:text-lg"
+        style={{
+          background:
+            "linear-gradient(135deg, var(--color-primary-base), var(--color-secondary-base))",
+          boxShadow:
+            "0 10px 30px -10px color-mix(in srgb, var(--color-primary-base) 60%, transparent)",
+        }}
+      >
+        {loading ? (
+          <Loader2
+            className="h-5 w-5 shrink-0 animate-spin"
+            aria-hidden
+          />
+        ) : (
+          <DownloadIcon />
+        )}
+        <span>{label}</span>
+      </button>
+      {downloadError ? (
+        <p
+          id="download-error"
+          role="alert"
+          className="max-w-md text-center text-sm"
+          style={{ color: "var(--color-text-muted)" }}
+        >
+          {downloadError}
+        </p>
+      ) : null}
+    </div>
   );
 }
 

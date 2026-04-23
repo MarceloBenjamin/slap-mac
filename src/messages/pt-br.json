@@ -11,6 +11,8 @@
   "hero_subheadline": "Um app pequenininho da barra de menu que usa o Sudden Motion Sensor do seu MacBook para transformar cada tapa em um som. Sem setup, sem cadastro. 100% gratuito.",
   "hero_download": "Baixar para Mac",
   "hero_download_meta": "Grátis · Apple Silicon",
+  "hero_download_error_not_configured": "Esta versão do site não consegue acessar o Firebase Storage. Inclua NEXT_PUBLIC_FIREBASE_* no ambiente do build ou defina NEXT_PUBLIC_DOWNLOAD_DMG_URL com o link direto do .dmg.",
+  "hero_download_error_failed": "Não foi possível iniciar o download. Confira a conexão e tente de novo.",
   "hero_mockup_title": "Slap Mac",
   "hero_mockup_status": "Ouvindo tapas…",
   "hero_mockup_sensitivity": "Sensibilidade",
